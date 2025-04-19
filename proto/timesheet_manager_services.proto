@@ -1,0 +1,48 @@
+edition = "2023";
+
+package timesheet_manager;
+
+option go_package = "github.com/JesusDeLaProg/timesheet-manager;proto";
+
+import "proto/timesheet_manager.proto";
+
+message FetchOptions {
+    message Sort {
+        enum Direction {
+            DIR_ASC = 0;
+            DIR_DESC = 1;
+        }
+        string field = 1;
+        Direction direction = 2;
+    }
+    Sort sort = 1;
+    uint64 skip = 2;
+    uint64 limit = 3;
+}
+
+message ValidationError {
+    
+}
+
+message FetchActivitiesRequest {
+    repeated string codes = 1;
+    FetchOptions options = 2;
+}
+message FetchActivitiesResponse {
+    repeated Activity activities = 1;
+}
+
+message SaveActivitiesRequest {
+    repeated Activity activities = 1;
+}
+message SaveActivitiesResponse {
+    oneof result {
+        repeated Activity activities = 1;
+    }
+}
+
+service ActivityService {
+    rpc Fetch(FetchActivitiesRequest) returns (FetchActivitiesResponse) {}
+
+    rpc Save(SaveActivitiesRequest) returns (SaveActivitiesResponse) {}
+}

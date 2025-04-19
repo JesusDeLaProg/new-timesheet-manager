@@ -1,0 +1,106 @@
+edition = "2023";
+
+package timesheet_manager;
+
+option go_package = "github.com/JesusDeLaProg/timesheet-manager;proto";
+
+import "google/protobuf/duration.proto";
+import "google/type/date.proto";
+import "google/type/money.proto";
+
+message EmployeeInfo {
+    message Role {
+        string title = 1;
+        google.type.Date start = 2;
+        google.type.Date end = 3;
+        google.type.Money hourly_rate = 4;
+    }
+
+    repeated Role roles = 1;
+}
+
+message User {
+    enum Role {
+        ROLE_UNSPECIFIED = 0;
+        ROLE_USER = 1;
+        ROLE_SUPER_USER = 2;
+        ROLE_ADMIN = 3;
+        ROLE_SUPER_ADMIN = 4;
+    }
+
+    bytes id = 1;
+    string username = 2;
+    string first_name = 3;
+    string last_name = 4;
+    Role role = 5;
+    string email = 6;
+    string password = 7;
+    bool is_active = 8;
+    EmployeeInfo employee_info = 9;
+}
+
+message Activity {
+    string code = 1;
+    string name = 2;
+}
+
+message Phase {
+    string code = 1;
+    string name = 2;
+}
+
+message Client {
+    bytes id = 1;
+    string name = 2;
+    Project.Type default_project_type = 3;
+}
+
+message Project {
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TYPE_PRIVATE = 1;
+        TYPE_PUBLIC = 2;
+    }
+    bytes id = 1;
+    string code = 2;
+    string name = 3;
+    bytes client = 4;
+    Type type = 5;
+    bool active = 6;
+}
+
+message Expense {
+    string description = 1;
+    google.type.Money amount = 2;
+}
+
+message Travel {
+    bytes project_id = 1;
+    google.type.Date date = 2;
+    string from = 3;
+    string to = 4;
+    double distance_km = 5;
+    repeated Expense expenses = 6;
+}
+
+message TimesheetEntry {
+    google.type.Date date = 1;
+    google.protobuf.Duration time = 2;
+}
+
+message TimesheetLine {
+    bytes project_id = 1;
+    string phase = 2;
+    string activity = 3;
+    string misc = 4;
+    repeated TimesheetEntry entries = 5;
+}
+
+message Timesheet {
+    bytes id = 1;
+    bytes user_id = 2;
+    google.type.Date begin = 3;
+    google.type.Date end = 4;
+    repeated TimesheetLine lines = 5;
+    repeated Travel travels = 6;
+}
