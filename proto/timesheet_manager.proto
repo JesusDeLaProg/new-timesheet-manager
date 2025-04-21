@@ -363,16 +363,16 @@ message FetchUsersRequest {
     FetchOptions options = 2;
 }
 message FetchUsersResponse {
-    repeated User employees = 1;
+    repeated User users = 1;
 }
 
 message CreateUserRequest {
-    User employee = 1;
+    User user = 1;
 }
 message CreateUserResponse {}
 
 message UpdateUserRequest {
-    User employee = 1;
+    User user = 1;
 }
 message UpdateUserResponse {}
 
@@ -382,7 +382,7 @@ message DeleteUserRequest {
 message DeleteUserResponse {}
 
 message ValidateUserRequest {
-    User employee = 1;
+    User user = 1;
 }
 message ValidateUserResponse {
     repeated ValidationError errors = 1;
