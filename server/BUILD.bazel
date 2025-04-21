@@ -1,7 +1,4 @@
-load("@gazelle//:def.bzl", "gazelle")
 load("@rules_go//go:def.bzl", "go_binary", "go_library")
-
-gazelle(name = "gazelle")
 
 go_binary(
     name = "server",
@@ -12,11 +9,13 @@ go_binary(
 go_library(
     name = "server_lib",
     srcs = ["main.go"],
-    importpath = "github.com/JesusDeLaProg/timesheet-manager/server",
+    importpath = "github.com/JesusDeLaProg/new-timesheet-manager/server",
     visibility = ["//visibility:private"],
     deps = [
+        "//proto:timesheet_manager_go_proto",
         "@org_golang_google_grpc//:grpc",
         "@org_golang_google_grpc//reflection",
-        "//proto:timesheet_manager_go_proto",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
     ],
 )

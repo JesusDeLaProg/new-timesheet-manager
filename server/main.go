@@ -1,38 +1,30 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net"
 
-	_ "github.com/JesusDeLaProg/timesheet-manager/proto"
+	pb "github.com/JesusDeLaProg/new-timesheet-manager/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 var port = flag.Int("port", 8080, "The server port")
 
-// type greetingServer struct {
-// 	pb.UnimplementedGreetingServer
-// }
-//
-// type emptyNameError struct{}
-//
-// func (emptyNameError) Error() string {
-// 	return "empty name"
-// }
-//
-// func (s *greetingServer) Greet(ctx context.Context, in *pb.GreetRequest) (*pb.GreetResponse, error) {
-// 	if in.GetName() == "" {
-// 		return nil, emptyNameError{}
-// 	}
-// 	message := fmt.Sprintf("Hello, %s!", in.GetName())
-// 	out := &pb.GreetResponse{
-// 		Message: &message,
-// 	}
-// 	return out, nil
-// }
+type ActivityServer struct{}
+
+func (s *ActivityServer) Fetch(ctx context.Context, r *pb.FetchActivitiesRequest) (*pb.FetchActivitiesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "Fetch is unimplemented")
+}
+
+func (s *ActivityServer) Save(ctx context.Context, r *pb.SaveActivitiesRequest) (*pb.SaveActivitiesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "Save is unimplemented")
+}
 
 func main() {
 	flag.Parse()
@@ -41,7 +33,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	// pb.RegisterGreetingServer(grpcServer, &greetingServer{})
+	pb.RegisterActivityServiceServer(grpcServer, &ActivityServer{})
 	reflection.Register(grpcServer)
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

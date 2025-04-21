@@ -2,13 +2,11 @@ edition = "2023";
 
 package timesheet_manager;
 
-option go_package = "github.com/JesusDeLaProg/timesheet-manager;proto";
-
 import "google/protobuf/duration.proto";
 import "google/type/date.proto";
 import "google/type/money.proto";
 
-message EmployeeInfo {
+message Employee {
     message Role {
         string title = 1;
         google.type.Date start = 2;
@@ -16,7 +14,11 @@ message EmployeeInfo {
         google.type.Money hourly_rate = 4;
     }
 
-    repeated Role roles = 1;
+    string code = 1;
+    bytes owning_user_id = 2;
+    string first_name = 3;
+    string last_name = 4;
+    repeated Role roles = 5;
 }
 
 message User {
@@ -30,13 +32,9 @@ message User {
 
     bytes id = 1;
     string username = 2;
-    string first_name = 3;
-    string last_name = 4;
-    Role role = 5;
-    string email = 6;
-    string password = 7;
-    bool is_active = 8;
-    EmployeeInfo employee_info = 9;
+    Role role = 3;
+    string email = 4;
+    string password = 5;
 }
 
 message Activity {
@@ -47,6 +45,7 @@ message Activity {
 message Phase {
     string code = 1;
     string name = 2;
+    repeated string activities_in_phase = 3;
 }
 
 message Client {
@@ -64,7 +63,7 @@ message Project {
     bytes id = 1;
     string code = 2;
     string name = 3;
-    bytes client = 4;
+    bytes client_id = 4;
     Type type = 5;
     bool active = 6;
 }
@@ -90,17 +89,309 @@ message TimesheetEntry {
 
 message TimesheetLine {
     bytes project_id = 1;
-    string phase = 2;
-    string activity = 3;
+    string phase_code = 2;
+    string activity_code = 3;
     string misc = 4;
     repeated TimesheetEntry entries = 5;
 }
 
 message Timesheet {
     bytes id = 1;
-    bytes user_id = 2;
+    bytes employee_code = 2;
     google.type.Date begin = 3;
     google.type.Date end = 4;
     repeated TimesheetLine lines = 5;
     repeated Travel travels = 6;
+}
+
+message FetchOptions {
+    message Sort {
+        enum Direction {
+            DIR_ASC = 0;
+            DIR_DESC = 1;
+        }
+        string field = 1;
+        Direction direction = 2;
+    }
+    Sort sort = 1;
+    uint64 skip = 2;
+    uint64 limit = 3;
+}
+
+message ValidationError {
+    string path = 1;
+    string error = 2;
+}
+
+message FetchActivitiesRequest {
+    repeated string codes = 1;
+    FetchOptions options = 2;
+}
+message FetchActivitiesResponse {
+    repeated Activity activities = 1;
+}
+
+message CreateActivityRequest {
+    Activity activity = 1;
+}
+message CreateActivityResponse {}
+
+message UpdateActivityRequest {
+    Activity activity = 1;
+}
+message UpdateActivityResponse {}
+
+message DeleteActivityRequest {
+    string code = 1;
+}
+message DeleteActivityResponse {}
+
+message ValidateActivityRequest {
+    Activity activity = 1;
+}
+message ValidateActivityResponse {
+    repeated ValidationError errors = 1;
+}
+
+service ActivityService {
+    rpc Fetch(FetchActivitiesRequest) returns (FetchActivitiesResponse) {}
+    rpc Create(CreateActivityRequest) returns (CreateActivityResponse) {}
+    rpc Update(UpdateActivityRequest) returns (UpdateActivityResponse) {}
+    rpc Delete(DeleteActivityRequest) returns (DeleteActivityResponse) {}
+    rpc Validate(ValidateActivityRequest) returns (ValidateActivityResponse) {}
+}
+
+message FetchPhasesRequest {
+    repeated string codes = 1;
+    FetchOptions options = 2;
+}
+message FetchPhasesResponse {
+    repeated Phase phases = 1;
+}
+
+message CreatePhaseRequest {
+    Phase phase = 1;
+}
+message CreatePhaseResponse {}
+
+message UpdatePhaseRequest {
+    Phase phase = 1;
+}
+message UpdatePhaseResponse {}
+
+message DeletePhaseRequest {
+    string code = 1;
+}
+message DeletePhaseResponse {}
+
+message ValidatePhaseRequest {
+    Phase phase = 1;
+}
+message ValidatePhaseResponse {
+    repeated ValidationError errors = 1;
+}
+
+service PhaseService {
+    rpc Fetch(FetchPhasesRequest) returns (FetchPhasesResponse) {}
+    rpc Create(CreatePhaseRequest) returns (CreatePhaseResponse) {}
+    rpc Update(UpdatePhaseRequest) returns (UpdatePhaseResponse) {}
+    rpc Delete(DeletePhaseRequest) returns (DeletePhaseResponse) {}
+    rpc Validate(ValidatePhaseRequest) returns (ValidatePhaseResponse) {}
+}
+
+message FetchClientsRequest {
+    repeated bytes ids = 1;
+    FetchOptions options = 2;
+}
+message FetchClientsResponse {
+    repeated Client clients = 1;
+}
+
+message CreateClientRequest {
+    Client client = 1;
+}
+message CreateClientResponse {}
+
+message UpdateClientRequest {
+    Client client = 1;
+}
+message UpdateClientResponse {}
+
+message DeleteClientRequest {
+    bytes id = 1;
+}
+message DeleteClientResponse {}
+
+message ValidateClientRequest {
+    Client client = 1;
+}
+message ValidateClientResponse {
+    repeated ValidationError errors = 1;
+}
+
+service ClientService {
+    rpc Fetch(FetchClientsRequest) returns (FetchClientsResponse) {}
+    rpc Create(CreateClientRequest) returns (CreateClientResponse) {}
+    rpc Update(UpdateClientRequest) returns (UpdateClientResponse) {}
+    rpc Delete(DeleteClientRequest) returns (DeleteClientResponse) {}
+    rpc Validate(ValidateClientRequest) returns (ValidateClientResponse) {}
+}
+
+message FetchProjectsRequest {
+    repeated bytes ids = 1;
+    FetchOptions options = 2;
+}
+message FetchProjectsResponse {
+    repeated Project projects = 1;
+}
+
+message CreateProjectRequest {
+    Project project = 1;
+}
+message CreateProjectResponse {}
+
+message UpdateProjectRequest {
+    Project project = 1;
+}
+message UpdateProjectResponse {}
+
+message DeleteProjectRequest {
+    bytes id = 1;
+}
+message DeleteProjectResponse {}
+
+message ValidateProjectRequest {
+    Project project = 1;
+}
+message ValidateProjectResponse {
+    repeated ValidationError errors = 1;
+}
+
+service ProjectService {
+    rpc Fetch(FetchProjectsRequest) returns (FetchProjectsResponse) {}
+    rpc Create(CreateProjectRequest) returns (CreateProjectResponse) {}
+    rpc Update(UpdateProjectRequest) returns (UpdateProjectResponse) {}
+    rpc Delete(DeleteProjectRequest) returns (DeleteProjectResponse) {}
+    rpc Validate(ValidateProjectRequest) returns (ValidateProjectResponse) {}
+}
+
+message FetchTimesheetsRequest {
+    repeated bytes ids = 1;
+    FetchOptions options = 2;
+}
+message FetchTimesheetsResponse {
+    repeated Timesheet timesheets = 1;
+}
+
+message CreateTimesheetRequest {
+    Timesheet timesheet = 1;
+}
+message CreateTimesheetResponse {}
+
+message UpdateTimesheetRequest {
+    Timesheet timesheet = 1;
+}
+message UpdateTimesheetResponse {}
+
+message DeleteTimesheetRequest {
+    bytes id = 1;
+}
+message DeleteTimesheetResponse {}
+
+message ValidateTimesheetRequest {
+    Timesheet timesheet = 1;
+}
+message ValidateTimesheetResponse {
+    repeated ValidationError errors = 1;
+}
+
+service TimesheetService {
+    rpc Fetch(FetchTimesheetsRequest) returns (FetchTimesheetsResponse) {}
+    rpc Create(CreateTimesheetRequest) returns (CreateTimesheetResponse) {}
+    rpc Update(UpdateTimesheetRequest) returns (UpdateTimesheetResponse) {}
+    rpc Delete(DeleteTimesheetRequest) returns (DeleteTimesheetResponse) {}
+    rpc Validate(ValidateTimesheetRequest) returns (ValidateTimesheetResponse) {}
+}
+
+message FetchEmployeesRequest {
+    repeated bytes ids = 1;
+    FetchOptions options = 2;
+}
+message FetchEmployeesResponse {
+    repeated Employee employees = 1;
+}
+
+message CreateEmployeeRequest {
+    Employee employee = 1;
+}
+message CreateEmployeeResponse {}
+
+message UpdateEmployeeRequest {
+    Employee employee = 1;
+}
+message UpdateEmployeeResponse {}
+
+message DeleteEmployeeRequest {
+    bytes id = 1;
+}
+message DeleteEmployeeResponse {}
+
+message ValidateEmployeeRequest {
+    Employee employee = 1;
+}
+message ValidateEmployeeResponse {
+    repeated ValidationError errors = 1;
+}
+
+message SetOwningUserRequest {
+    string employee_code = 1;
+    bytes user_id = 2;
+}
+message SetOwningUserResponse {}
+
+service EmployeeService {
+    rpc Fetch(FetchEmployeesRequest) returns (FetchEmployeesResponse) {}
+    rpc Create(CreateEmployeeRequest) returns (CreateEmployeeResponse) {}
+    rpc Update(UpdateEmployeeRequest) returns (UpdateEmployeeResponse) {}
+    rpc Delete(DeleteEmployeeRequest) returns (DeleteEmployeeResponse) {}
+    rpc Validate(ValidateEmployeeRequest) returns (ValidateEmployeeResponse) {}
+    rpc SetOwningUser(SetOwningUserRequest) returns (SetOwningUserResponse) {}
+}
+
+message FetchUsersRequest {
+    repeated bytes ids = 1;
+    FetchOptions options = 2;
+}
+message FetchUsersResponse {
+    repeated User employees = 1;
+}
+
+message CreateUserRequest {
+    User employee = 1;
+}
+message CreateUserResponse {}
+
+message UpdateUserRequest {
+    User employee = 1;
+}
+message UpdateUserResponse {}
+
+message DeleteUserRequest {
+    bytes id = 1;
+}
+message DeleteUserResponse {}
+
+message ValidateUserRequest {
+    User employee = 1;
+}
+message ValidateUserResponse {
+    repeated ValidationError errors = 1;
+}
+
+service UserService {
+    rpc Fetch(FetchUsersRequest) returns (FetchUsersResponse) {}
+    rpc Create(CreateUserRequest) returns (CreateUserResponse) {}
+    rpc Update(UpdateUserRequest) returns (UpdateUserResponse) {}
+    rpc Delete(DeleteUserRequest) returns (DeleteUserResponse) {}
+    rpc Validate(ValidateUserRequest) returns (ValidateUserResponse) {}
 }
