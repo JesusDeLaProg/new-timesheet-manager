@@ -14,7 +14,7 @@ message Employee {
         google.type.Money hourly_rate = 4;
     }
 
-    string code = 1;
+    bytes id = 1;
     bytes owning_user_id = 2;
     string first_name = 3;
     string last_name = 4;
@@ -38,14 +38,16 @@ message User {
 }
 
 message Activity {
-    string code = 1;
-    string name = 2;
+    bytes id = 1;
+    string code = 2;
+    string name = 3;
 }
 
 message Phase {
-    string code = 1;
-    string name = 2;
-    repeated string activities_in_phase = 3;
+    bytes id = 1;
+    string code = 2;
+    string name = 3;
+    repeated bytes activities_in_phase = 4;
 }
 
 message Client {
@@ -89,15 +91,15 @@ message TimesheetEntry {
 
 message TimesheetLine {
     bytes project_id = 1;
-    string phase_code = 2;
-    string activity_code = 3;
+    bytes phase_id = 2;
+    bytes activity_id = 3;
     string misc = 4;
     repeated TimesheetEntry entries = 5;
 }
 
 message Timesheet {
     bytes id = 1;
-    bytes employee_code = 2;
+    bytes employee_id = 2;
     google.type.Date begin = 3;
     google.type.Date end = 4;
     repeated TimesheetLine lines = 5;
@@ -124,7 +126,7 @@ message ValidationError {
 }
 
 message FetchActivitiesRequest {
-    repeated string codes = 1;
+    repeated bytes ids = 1;
     FetchOptions options = 2;
 }
 message FetchActivitiesResponse {
@@ -142,7 +144,7 @@ message UpdateActivityRequest {
 message UpdateActivityResponse {}
 
 message DeleteActivityRequest {
-    string code = 1;
+    bytes id = 1;
 }
 message DeleteActivityResponse {}
 
@@ -162,7 +164,7 @@ service ActivityService {
 }
 
 message FetchPhasesRequest {
-    repeated string codes = 1;
+    repeated bytes ids = 1;
     FetchOptions options = 2;
 }
 message FetchPhasesResponse {
@@ -180,7 +182,7 @@ message UpdatePhaseRequest {
 message UpdatePhaseResponse {}
 
 message DeletePhaseRequest {
-    string code = 1;
+    bytes id = 1;
 }
 message DeletePhaseResponse {}
 
@@ -343,19 +345,12 @@ message ValidateEmployeeResponse {
     repeated ValidationError errors = 1;
 }
 
-message SetOwningUserRequest {
-    string employee_code = 1;
-    bytes user_id = 2;
-}
-message SetOwningUserResponse {}
-
 service EmployeeService {
     rpc Fetch(FetchEmployeesRequest) returns (FetchEmployeesResponse) {}
     rpc Create(CreateEmployeeRequest) returns (CreateEmployeeResponse) {}
     rpc Update(UpdateEmployeeRequest) returns (UpdateEmployeeResponse) {}
     rpc Delete(DeleteEmployeeRequest) returns (DeleteEmployeeResponse) {}
     rpc Validate(ValidateEmployeeRequest) returns (ValidateEmployeeResponse) {}
-    rpc SetOwningUser(SetOwningUserRequest) returns (SetOwningUserResponse) {}
 }
 
 message FetchUsersRequest {
@@ -388,10 +383,16 @@ message ValidateUserResponse {
     repeated ValidationError errors = 1;
 }
 
+message FetchUsernamesRequest {}
+message FetchUsernamesResponse {
+    map<bytes, string> usernames = 1;
+}
+
 service UserService {
     rpc Fetch(FetchUsersRequest) returns (FetchUsersResponse) {}
     rpc Create(CreateUserRequest) returns (CreateUserResponse) {}
     rpc Update(UpdateUserRequest) returns (UpdateUserResponse) {}
     rpc Delete(DeleteUserRequest) returns (DeleteUserResponse) {}
     rpc Validate(ValidateUserRequest) returns (ValidateUserResponse) {}
+    rpc FetchUsernames(FetchUsernamesRequest) returns (FetchUsernamesResponse) {}
 }

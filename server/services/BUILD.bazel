@@ -4,7 +4,10 @@ package(default_visibility = ["//server:__subpackages__"])
 
 go_library(
     name = "services_lib",
-    srcs = ["services.go"],
+    srcs = [
+        "services.go",
+        "validators.go",
+    ],
     importpath = "github.com/JesusDeLaProg/new-timesheet-manager/server/services",
     deps = [
         "//proto:timesheet_manager_go_proto",

@@ -10,13 +10,27 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type ActivityServer struct{}
-type PhaseServer struct{}
-type ClientServer struct{}
-type ProjectServer struct{}
-type TimesheetServer struct{}
-type EmployeeServer struct{}
-type UserServer struct{}
+type ActivityServer struct {
+	validator Validator[pb.Activity]
+}
+type PhaseServer struct {
+	validator Validator[pb.Phase]
+}
+type ClientServer struct {
+	validator Validator[pb.Client]
+}
+type ProjectServer struct {
+	validator Validator[pb.Project]
+}
+type TimesheetServer struct {
+	validator Validator[pb.Timesheet]
+}
+type EmployeeServer struct {
+	validator Validator[pb.Employee]
+}
+type UserServer struct {
+	validator Validator[pb.User]
+}
 
 func (s *ActivityServer) Fetch(ctx context.Context, r *pb.FetchActivitiesRequest) (*pb.FetchActivitiesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
@@ -162,14 +176,18 @@ func (s *UserServer) Validate(ctx context.Context, r *pb.ValidateUserRequest) (*
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
 }
 
+func (s *UserServer) FetchUsernames(ctx context.Context, r *pb.FetchUsernamesRequest) (*pb.FetchUsernamesRepsonse, error) {
+	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+}
+
 func RegisterServices(s *grpc.Server, enable_reflection bool) {
-	pb.RegisterActivityServiceServer(s, &ActivityServer{})
-	pb.RegisterPhaseServiceServer(s, &PhaseServer{})
-	pb.RegisterClientServiceServer(s, &ClientServer{})
-	pb.RegisterProjectServiceServer(s, &ProjectServer{})
-	pb.RegisterTimesheetServiceServer(s, &TimesheetServer{})
-	pb.RegisterEmployeeServiceServer(s, &EmployeeServer{})
-	pb.RegisterUserServiceServer(s, &UserServer{})
+	pb.RegisterActivityServiceServer(s, &ActivityServer{validator: &ActivityValidator{}})
+	pb.RegisterPhaseServiceServer(s, &PhaseServer{validator: &PhaseValidator{}})
+	pb.RegisterClientServiceServer(s, &ClientServer{validator: &ClientValidator{}})
+	pb.RegisterProjectServiceServer(s, &ProjectServer{validator: &ProjectValidator{}})
+	pb.RegisterTimesheetServiceServer(s, &TimesheetServer{validator: &TimesheetValidator{}})
+	pb.RegisterEmployeeServiceServer(s, &EmployeeServer{validator: &EmployeeValidator{}})
+	pb.RegisterUserServiceServer(s, &UserServer{validator: &UserValidator{}})
 	if enable_reflection {
 		reflection.Register(s)
 	}
