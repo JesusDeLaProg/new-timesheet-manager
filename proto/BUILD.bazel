@@ -1,5 +1,5 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
-load("@rules_go//proto:def.bzl", "go_proto_library", "go_grpc_library")
+load("@rules_go//proto:def.bzl", "go_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -12,13 +12,14 @@ proto_library(
         "@googleapis//google/type:date_proto",
         "@googleapis//google/type:money_proto",
         "@protobuf//:duration_proto",
+        "@protobuf//:go_features_proto",
     ],
 )
 
 go_grpc_library(
     name = "timesheet_manager_go_proto",
     importpath = "github.com/JesusDeLaProg/new-timesheet-manager/proto",
-    protos = [":timesheet_manager_proto"],
+    proto = ":timesheet_manager_proto",
     deps = [
         "@googleapis//google/type:date_go_proto",
         "@googleapis//google/type:money_go_proto",

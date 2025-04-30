@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+package(default_visibility = ["//server:__subpackages__"])
+
+go_library(
+    name = "models_lib",
+    srcs = ["models.go"],
+    importpath = "github.com/JesusDeLaProg/new-timesheet-manager/server/models",
+    deps = [
+        "//proto:timesheet_manager_go_proto",
+    ],
+)

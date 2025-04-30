@@ -3,8 +3,11 @@ edition = "2023";
 package timesheet_manager;
 
 import "google/protobuf/duration.proto";
+import "google/protobuf/go_features.proto";
 import "google/type/date.proto";
 import "google/type/money.proto";
+
+option features.(pb.go).api_level = API_OPAQUE;
 
 message Employee {
     message Role {
@@ -385,7 +388,11 @@ message ValidateUserResponse {
 
 message FetchUsernamesRequest {}
 message FetchUsernamesResponse {
-    map<bytes, string> usernames = 1;
+    message UserIdAndName {
+        bytes user_id = 1;
+        bytes username = 2;
+    }
+    repeated UserIdAndName usernames = 1;
 }
 
 service UserService {

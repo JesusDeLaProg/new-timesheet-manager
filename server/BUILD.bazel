@@ -12,11 +12,8 @@ go_library(
     importpath = "github.com/JesusDeLaProg/new-timesheet-manager/server",
     visibility = ["//visibility:private"],
     deps = [
-        "//proto:timesheet_manager_go_proto",
+        "//server/models:models_lib",
         "//server/services:services_lib",
         "@org_golang_google_grpc//:grpc",
-        "@org_golang_google_grpc//reflection",
-        "@org_golang_google_grpc//codes",
-        "@org_golang_google_grpc//status",
     ],
 )

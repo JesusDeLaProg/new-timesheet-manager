@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/JesusDeLaProg/new-timesheet-manager/server/models"
 	"github.com/JesusDeLaProg/new-timesheet-manager/server/services"
 	"google.golang.org/grpc"
 )
@@ -20,7 +21,11 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	services.RegisterServices(grpcServer, *enable_reflection)
+	m, err := models.GetModelsForDb("")
+	if err != nil {
+		log.Fatalf("failed to connect to Database: %v", err)
+	}
+	services.RegisterServices(*enable_reflection, grpcServer, m)
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

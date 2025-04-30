@@ -4,6 +4,7 @@ import (
 	"context"
 
 	pb "github.com/JesusDeLaProg/new-timesheet-manager/proto"
+	"github.com/JesusDeLaProg/new-timesheet-manager/server/models"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -11,24 +12,31 @@ import (
 )
 
 type ActivityServer struct {
+	models    *models.Models
 	validator Validator[pb.Activity]
 }
 type PhaseServer struct {
+	models    *models.Models
 	validator Validator[pb.Phase]
 }
 type ClientServer struct {
+	models    *models.Models
 	validator Validator[pb.Client]
 }
 type ProjectServer struct {
+	models    *models.Models
 	validator Validator[pb.Project]
 }
 type TimesheetServer struct {
+	models    *models.Models
 	validator Validator[pb.Timesheet]
 }
 type EmployeeServer struct {
+	models    *models.Models
 	validator Validator[pb.Employee]
 }
 type UserServer struct {
+	models    *models.Models
 	validator Validator[pb.User]
 }
 
@@ -152,10 +160,6 @@ func (s *EmployeeServer) Validate(ctx context.Context, r *pb.ValidateEmployeeReq
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
 }
 
-func (s *EmployeeServer) SetOwningUser(ctx context.Context, r *pb.SetOwningUserRequest) (*pb.SetOwningUserResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
-}
-
 func (s *UserServer) Fetch(ctx context.Context, r *pb.FetchUsersRequest) (*pb.FetchUsersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
 }
@@ -176,18 +180,18 @@ func (s *UserServer) Validate(ctx context.Context, r *pb.ValidateUserRequest) (*
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
 }
 
-func (s *UserServer) FetchUsernames(ctx context.Context, r *pb.FetchUsernamesRequest) (*pb.FetchUsernamesRepsonse, error) {
+func (s *UserServer) FetchUsernames(ctx context.Context, r *pb.FetchUsernamesRequest) (*pb.FetchUsernamesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
 }
 
-func RegisterServices(s *grpc.Server, enable_reflection bool) {
-	pb.RegisterActivityServiceServer(s, &ActivityServer{validator: &ActivityValidator{}})
-	pb.RegisterPhaseServiceServer(s, &PhaseServer{validator: &PhaseValidator{}})
-	pb.RegisterClientServiceServer(s, &ClientServer{validator: &ClientValidator{}})
-	pb.RegisterProjectServiceServer(s, &ProjectServer{validator: &ProjectValidator{}})
-	pb.RegisterTimesheetServiceServer(s, &TimesheetServer{validator: &TimesheetValidator{}})
-	pb.RegisterEmployeeServiceServer(s, &EmployeeServer{validator: &EmployeeValidator{}})
-	pb.RegisterUserServiceServer(s, &UserServer{validator: &UserValidator{}})
+func RegisterServices(enable_reflection bool, s *grpc.Server, m *models.Models) {
+	pb.RegisterActivityServiceServer(s, &ActivityServer{models: m, validator: &ActivityValidator{}})
+	pb.RegisterPhaseServiceServer(s, &PhaseServer{models: m, validator: &PhaseValidator{}})
+	pb.RegisterClientServiceServer(s, &ClientServer{models: m, validator: &ClientValidator{}})
+	pb.RegisterProjectServiceServer(s, &ProjectServer{models: m, validator: &ProjectValidator{}})
+	pb.RegisterTimesheetServiceServer(s, &TimesheetServer{models: m, validator: &TimesheetValidator{}})
+	pb.RegisterEmployeeServiceServer(s, &EmployeeServer{models: m, validator: &EmployeeValidator{}})
+	pb.RegisterUserServiceServer(s, &UserServer{models: m, validator: &UserValidator{}})
 	if enable_reflection {
 		reflection.Register(s)
 	}
