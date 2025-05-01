@@ -1,5 +1,5 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
-load("@rules_go//proto:def.bzl", "go_grpc_library")
+load("@rules_go//proto:def.bzl", "go_grpc_library", "go_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -13,7 +13,14 @@ proto_library(
         "@googleapis//google/type:money_proto",
         "@protobuf//:duration_proto",
         "@protobuf//:go_features_proto",
+        "@protovalidate//proto/protovalidate/buf/validate:validate_proto",
     ],
+)
+
+go_proto_library(
+    name = "protovalidate_go_proto",
+    importpath = "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate",
+    proto = "@protovalidate//proto/protovalidate/buf/validate:validate_proto",
 )
 
 go_grpc_library(
@@ -21,6 +28,7 @@ go_grpc_library(
     importpath = "github.com/JesusDeLaProg/new-timesheet-manager/proto",
     proto = ":timesheet_manager_proto",
     deps = [
+        ":protovalidate_go_proto",
         "@googleapis//google/type:date_go_proto",
         "@googleapis//google/type:money_go_proto",
     ],

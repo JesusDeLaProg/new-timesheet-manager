@@ -2,6 +2,7 @@ edition = "2023";
 
 package timesheet_manager;
 
+import "buf/validate/validate.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/go_features.proto";
 import "google/type/date.proto";
