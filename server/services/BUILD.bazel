@@ -12,6 +12,7 @@ go_library(
     deps = [
         "//proto:timesheet_manager_go_proto",
         "//server/models:models_lib",
+        "@build_buf_go_protovalidate//:protovalidate",
         "@org_golang_google_grpc//:grpc",
         "@org_golang_google_grpc//codes",
         "@org_golang_google_grpc//reflection",

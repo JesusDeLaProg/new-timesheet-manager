@@ -1,6 +1,7 @@
 package services
 
 import (
+	"buf.build/go/protovalidate"
 	pb "github.com/JesusDeLaProg/new-timesheet-manager/proto"
 	"google.golang.org/protobuf/proto"
 )
@@ -19,6 +20,12 @@ type UserValidator struct{}
 
 func (v *ActivityValidator) Validate(a *pb.Activity) []*pb.ValidationError {
 	errors := make([]*pb.ValidationError, 0)
+	if err := protovalidate.Validate(a); err != nil {
+		errors = append(errors, pb.ValidationError_builder{
+			Path:  proto.String("code"),
+			Error: proto.String(err.Error()),
+		}.Build())
+	}
 
 	if len(a.GetCode()) != 2 {
 		errors = append(errors, pb.ValidationError_builder{

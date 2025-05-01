@@ -43,8 +43,8 @@ message User {
 
 message Activity {
     bytes id = 1;
-    string code = 2;
-    string name = 3;
+    string code = 2 [(buf.validate.field).string.len = 2];
+    string name = 3 [(buf.validate.field).string.min_len = 2];
 }
 
 message Phase {
