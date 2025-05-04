@@ -57,7 +57,9 @@ func (s *ActivityServer) Delete(ctx context.Context, r *pb.DeleteActivityRequest
 }
 
 func (s *ActivityServer) Validate(ctx context.Context, r *pb.ValidateActivityRequest) (*pb.ValidateActivityResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateActivityResponse{}
+	res.SetErrors(s.validator.Validate(r.GetActivity()))
+	return res, nil
 }
 
 func (s *PhaseServer) Fetch(ctx context.Context, r *pb.FetchPhasesRequest) (*pb.FetchPhasesResponse, error) {
@@ -77,7 +79,9 @@ func (s *PhaseServer) Delete(ctx context.Context, r *pb.DeletePhaseRequest) (*pb
 }
 
 func (s *PhaseServer) Validate(ctx context.Context, r *pb.ValidatePhaseRequest) (*pb.ValidatePhaseResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidatePhaseResponse{}
+	res.SetErrors(s.validator.Validate(r.GetPhase()))
+	return res, nil
 }
 
 func (s *ClientServer) Fetch(ctx context.Context, r *pb.FetchClientsRequest) (*pb.FetchClientsResponse, error) {
@@ -97,7 +101,9 @@ func (s *ClientServer) Delete(ctx context.Context, r *pb.DeleteClientRequest) (*
 }
 
 func (s *ClientServer) Validate(ctx context.Context, r *pb.ValidateClientRequest) (*pb.ValidateClientResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateClientResponse{}
+	res.SetErrors(s.validator.Validate(r.GetClient()))
+	return res, nil
 }
 
 func (s *ProjectServer) Fetch(ctx context.Context, r *pb.FetchProjectsRequest) (*pb.FetchProjectsResponse, error) {
@@ -117,7 +123,9 @@ func (s *ProjectServer) Delete(ctx context.Context, r *pb.DeleteProjectRequest) 
 }
 
 func (s *ProjectServer) Validate(ctx context.Context, r *pb.ValidateProjectRequest) (*pb.ValidateProjectResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateProjectResponse{}
+	res.SetErrors(s.validator.Validate(r.GetProject()))
+	return res, nil
 }
 
 func (s *TimesheetServer) Fetch(ctx context.Context, r *pb.FetchTimesheetsRequest) (*pb.FetchTimesheetsResponse, error) {
@@ -137,7 +145,9 @@ func (s *TimesheetServer) Delete(ctx context.Context, r *pb.DeleteTimesheetReque
 }
 
 func (s *TimesheetServer) Validate(ctx context.Context, r *pb.ValidateTimesheetRequest) (*pb.ValidateTimesheetResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateTimesheetResponse{}
+	res.SetErrors(s.validator.Validate(r.GetTimesheet()))
+	return res, nil
 }
 
 func (s *EmployeeServer) Fetch(ctx context.Context, r *pb.FetchEmployeesRequest) (*pb.FetchEmployeesResponse, error) {
@@ -157,7 +167,9 @@ func (s *EmployeeServer) Delete(ctx context.Context, r *pb.DeleteEmployeeRequest
 }
 
 func (s *EmployeeServer) Validate(ctx context.Context, r *pb.ValidateEmployeeRequest) (*pb.ValidateEmployeeResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateEmployeeResponse{}
+	res.SetErrors(s.validator.Validate(r.GetEmployee()))
+	return res, nil
 }
 
 func (s *UserServer) Fetch(ctx context.Context, r *pb.FetchUsersRequest) (*pb.FetchUsersResponse, error) {
@@ -177,7 +189,9 @@ func (s *UserServer) Delete(ctx context.Context, r *pb.DeleteUserRequest) (*pb.D
 }
 
 func (s *UserServer) Validate(ctx context.Context, r *pb.ValidateUserRequest) (*pb.ValidateUserResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "Method unimplemented")
+	res := &pb.ValidateUserResponse{}
+	res.SetErrors(s.validator.Validate(r.GetUser()))
+	return res, nil
 }
 
 func (s *UserServer) FetchUsernames(ctx context.Context, r *pb.FetchUsernamesRequest) (*pb.FetchUsernamesResponse, error) {

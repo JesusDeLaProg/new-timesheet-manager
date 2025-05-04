@@ -90,7 +90,7 @@ message Travel {
 
 message TimesheetEntry {
     google.type.Date date = 1;
-    google.protobuf.Duration time = 2;
+    google.protobuf.Duration time = 2 [(buf.validate.field).duration.gt = { seconds: 0 }];
 }
 
 message TimesheetLine {
