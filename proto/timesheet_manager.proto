@@ -12,17 +12,52 @@ option features.(pb.go).api_level = API_OPAQUE;
 
 message Employee {
     message Role {
-        string title = 1;
-        google.type.Date start = 2;
-        google.type.Date end = 3;
-        google.type.Money hourly_rate = 4;
+        string title = 1 [(buf.validate.field).required = true];
+        google.type.Date start = 2 [
+            (buf.validate.field).cel = {
+                id: "start.isvalid",
+                message: "start should be a valid date"
+                expression: "this.day > 0 && this.month > 0 && this.year > 0"
+            }
+        ];
+        google.type.Date end = 3 [
+            (buf.validate.field).cel = {
+                id: "end.isvalid",
+                message: "end should be a valid date"
+                expression: "this.day > 0 && this.month > 0 && this.year > 0"
+            }
+        ];
+        google.type.Money hourly_rate = 4 [
+            (buf.validate.field).required = true,
+            (buf.validate.field).cel = {
+                id: "hourly_rate.iscad",
+                message: "Supported currency: CAD"
+                expression: "this.currency_code == 'CAD'"
+            },
+            (buf.validate.field).cel = {
+                id: "hourly_rate.ispositive",
+                message: "hourly_rate should be a positive amount"
+                expression: "this.units > 0 && this.nanos > 0"
+            }
+        ];
     }
 
     bytes id = 1;
-    bytes owning_user_id = 2;
-    string first_name = 3;
-    string last_name = 4;
-    repeated Role roles = 5;
+    bytes owning_user_id = 2 [(buf.validate.field).required = true];
+    string first_name = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 3];
+    string last_name = 4 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 3];
+    repeated Role roles = 5 [
+        (buf.validate.field).cel = {
+            id: "roles.hasoneopenstart",
+            message: "roles should contain strictly one without a start date"
+            expression: "size(this.filter(r, r.start == null)) == 1"
+        },
+        (buf.validate.field).cel = {
+            id: "roles.hasoneopenend",
+            message: "roles should contain strictly one without an end date"
+            expression: "size(this.filter(r, r.end == null)) == 1"
+        }
+    ];
 }
 
 message User {
@@ -35,29 +70,29 @@ message User {
     }
 
     bytes id = 1;
-    string username = 2;
-    Role role = 3;
-    string email = 4;
-    string password = 5;
+    string username = 2 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 3];
+    Role role = 3 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
+    string email = 4[(buf.validate.field).required = true, (buf.validate.field).string.email = true];
+    bytes password = 5 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
 }
 
 message Activity {
     bytes id = 1;
-    string code = 2 [(buf.validate.field).string.len = 2];
-    string name = 3 [(buf.validate.field).string.min_len = 2];
+    string code = 2 [(buf.validate.field).required = true, (buf.validate.field).string.len = 2];
+    string name = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 2];
 }
 
 message Phase {
     bytes id = 1;
-    string code = 2;
-    string name = 3;
+    string code = 2 [(buf.validate.field).required = true, (buf.validate.field).string.len = 2];
+    string name = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 2];
     repeated bytes activities_in_phase = 4;
 }
 
 message Client {
     bytes id = 1;
-    string name = 2;
-    Project.Type default_project_type = 3;
+    string name = 2 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+    Project.Type default_project_type = 3 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
 }
 
 message Project {
@@ -67,46 +102,90 @@ message Project {
         TYPE_PUBLIC = 2;
     }
     bytes id = 1;
-    string code = 2;
-    string name = 3;
-    bytes client_id = 4;
-    Type type = 5;
-    bool active = 6;
+    string code = 2 [(buf.validate.field).required = true, (buf.validate.field).string.pattern = "\\d{2,4}-\\d+"];
+    string name = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+    bytes client_id = 4 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+    Type type = 5 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
+    bool active = 6 [(buf.validate.field).required = true];
 }
 
 message Expense {
-    string description = 1;
-    google.type.Money amount = 2;
+    string description = 1 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+    google.type.Money amount = 2 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "hourly_rate.iscad",
+            message: "Supported currency: CAD"
+            expression: "this.currency_code == 'CAD'"
+        },
+        (buf.validate.field).cel = {
+            id: "hourly_rate.ispositive",
+            message: "hourly_rate should be a positive amount"
+            expression: "this.units > 0 && this.nanos > 0"
+        }
+    ];
 }
 
 message Travel {
-    bytes project_id = 1;
-    google.type.Date date = 2;
-    string from = 3;
-    string to = 4;
-    double distance_km = 5;
+    bytes project_id = 1 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+    google.type.Date date = 2 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "date.isvalid",
+            message: "date should be a valid date"
+            expression: "this.day > 0 && this.month > 0 && this.year > 0"
+        }
+    ];
+    string from = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+    string to = 4 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
+    double distance_km = 5 [(buf.validate.field).required = true, (buf.validate.field).double.finite = true, (buf.validate.field).double.gt = 0.0];
     repeated Expense expenses = 6;
 }
 
 message TimesheetEntry {
-    google.type.Date date = 1;
+    google.type.Date date = 1 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "date.isvalid",
+            message: "date should be a valid date"
+            expression: "this.day > 0 && this.month > 0 && this.year > 0"
+        }
+    ];
     google.protobuf.Duration time = 2 [(buf.validate.field).duration.gt = { seconds: 0 }];
 }
 
 message TimesheetLine {
-    bytes project_id = 1;
-    bytes phase_id = 2;
-    bytes activity_id = 3;
+    bytes project_id = 1 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+    bytes phase_id = 2 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+    bytes activity_id = 3 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
     string misc = 4;
-    repeated TimesheetEntry entries = 5;
+    repeated TimesheetEntry entries = 5 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).repeated.min_items = 14,
+        (buf.validate.field).repeated.max_items = 14
+    ];
 }
 
 message Timesheet {
     bytes id = 1;
-    bytes employee_id = 2;
-    google.type.Date begin = 3;
-    google.type.Date end = 4;
-    repeated TimesheetLine lines = 5;
+    bytes employee_id = 2 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+    google.type.Date begin = 3 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "begin.isvalid",
+            message: "begin should be a valid date"
+            expression: "this.day > 0 && this.month > 0 && this.year > 0"
+        }
+    ];
+    google.type.Date end = 4 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "end.isvalid",
+            message: "end should be a valid date"
+            expression: "this.day > 0 && this.month > 0 && this.year > 0"
+        }
+    ];
+    repeated TimesheetLine lines = 5 [(buf.validate.field).required = true, (buf.validate.field).repeated.min_items = 1];
     repeated Travel travels = 6;
 }
 
