@@ -1,5 +1,5 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
-load("@rules_go//proto:def.bzl", "go_grpc_library", "go_proto_library")
+load("@rules_go//proto:def.bzl", "go_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
 
