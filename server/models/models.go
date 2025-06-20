@@ -1,6 +1,8 @@
 package models
 
 import (
+	"strings"
+
 	pb "github.com/JesusDeLaProg/new-timesheet-manager/proto"
 )
 
@@ -37,16 +39,19 @@ type UserModel interface {
 }
 
 type Models struct {
-	Activity  *ActivityModel
-	Phase     *PhaseModel
-	Client    *ClientModel
-	Project   *ProjectModel
-	Timesheet *TimesheetModel
-	Employee  *EmployeeModel
-	User      *UserModel
+	Activity  ActivityModel
+	Phase     PhaseModel
+	Client    ClientModel
+	Project   ProjectModel
+	Timesheet TimesheetModel
+	Employee  EmployeeModel
+	User      UserModel
 }
 
 func GetModelsForDb(dbAddr string) (*Models, error) {
+	if strings.HasPrefix(dbAddr, "firebase:") {
+		return GetModelsForFirebase(strings.TrimPrefix(dbAddr, "firebase:"))
+	}
 	return &Models{
 		Activity:  nil,
 		Phase:     nil,

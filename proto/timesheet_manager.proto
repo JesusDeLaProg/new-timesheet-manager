@@ -10,10 +10,26 @@ import "google/type/money.proto";
 
 option features.(pb.go).api_level = API_OPAQUE;
 
+message Distance {
+    enum Unit {
+        UNIT_UNSPECIFIED = 0;
+        UNIT_KILOMETER = 1;
+        UNIT_MILE = 2;
+    }
+
+    Unit unit = 1 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
+    int64 units = 2;
+    int32 nanos = 3;
+}
+
 message Employee {
     message Role {
-        string title = 1 [(buf.validate.field).required = true];
+        string title = 1 [
+            (buf.validate.field).required = true,
+            (buf.validate.field).string.min_len = 3
+        ];
         google.type.Date start = 2 [
+            (buf.validate.field).required = true,
             (buf.validate.field).cel = {
                 id: "start.isvalid",
                 message: "start should be a valid date"
@@ -21,6 +37,7 @@ message Employee {
             }
         ];
         google.type.Date end = 3 [
+            (buf.validate.field).required = true,
             (buf.validate.field).cel = {
                 id: "end.isvalid",
                 message: "end should be a valid date"
@@ -30,14 +47,14 @@ message Employee {
         google.type.Money hourly_rate = 4 [
             (buf.validate.field).required = true,
             (buf.validate.field).cel = {
-                id: "hourly_rate.iscad",
-                message: "Supported currency: CAD"
-                expression: "this.currency_code == 'CAD'"
+                id: "hourly_rate.hascurrencycode",
+                message: "hourly_rate should have a currency code"
+                expression: "this.currency_code != ''"
             },
             (buf.validate.field).cel = {
                 id: "hourly_rate.ispositive",
                 message: "hourly_rate should be a positive amount"
-                expression: "this.units > 0 && this.nanos > 0"
+                expression: "this.units >= 0 && this.nanos >= 0 && (this.units + this.nanos) > 0"
             }
         ];
     }
@@ -72,7 +89,7 @@ message User {
     bytes id = 1;
     string username = 2 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 3];
     Role role = 3 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
-    string email = 4[(buf.validate.field).required = true, (buf.validate.field).string.email = true];
+    string email = 4 [(buf.validate.field).required = true, (buf.validate.field).string.email = true];
     bytes password = 5 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
 }
 
@@ -86,7 +103,11 @@ message Phase {
     bytes id = 1;
     string code = 2 [(buf.validate.field).required = true, (buf.validate.field).string.len = 2];
     string name = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 2];
-    repeated bytes activities_in_phase = 4;
+    repeated bytes activities_in_phase = 4 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).repeated.min_items = 1,
+        (buf.validate.field).repeated.unique = true
+    ];
 }
 
 message Client {
@@ -114,14 +135,14 @@ message Expense {
     google.type.Money amount = 2 [
         (buf.validate.field).required = true,
         (buf.validate.field).cel = {
-            id: "hourly_rate.iscad",
-            message: "Supported currency: CAD"
-            expression: "this.currency_code == 'CAD'"
+            id: "hourly_rate.hascurrencycode",
+            message: "hourly_rate should have a currency code"
+            expression: "this.currency_code != ''"
         },
         (buf.validate.field).cel = {
-            id: "hourly_rate.ispositive",
-            message: "hourly_rate should be a positive amount"
-            expression: "this.units > 0 && this.nanos > 0"
+            id: "amount.ispositive",
+            message: "amount should be a positive amount"
+            expression: "this.units >= 0 && this.nanos >= 0 && (this.units + this.nanos) > 0"
         }
     ];
 }
@@ -138,7 +159,14 @@ message Travel {
     ];
     string from = 3 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
     string to = 4 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 1];
-    double distance_km = 5 [(buf.validate.field).required = true, (buf.validate.field).double.finite = true, (buf.validate.field).double.gt = 0.0];
+    Distance distance = 5 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "distance.ispositive",
+            message: "distance should be a positive distance",
+            expression: "this.units >= 0 && this.nanos >= 0 && (this.units + this.nanos) > 0"
+        }
+    ];
     repeated Expense expenses = 6;
 }
 
