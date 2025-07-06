@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/server-csharp/">
+    <Project Path="server-csharp/new-timesheet-manager-server.csproj" />
+  </Folder>
+</Solution>
