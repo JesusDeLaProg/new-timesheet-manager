@@ -1,0 +1,66 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "scripts": {
+    "buf": "buf",
+    "ng": "ng",
+    "start": "npm run build:proto && ng serve",
+    "build": "npm run build:proto && npm run build:app",
+    "build:app": "ng build",
+    "build:proto": "buf generate",
+    "watch": "npm run build:proto && ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:app": "node dist/app/server/server.mjs"
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/platform-server": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "@angular/ssr": "^20.0.5",
+    "@bufbuild/protobuf": "^2.6.0",
+    "@bufbuild/protovalidate": "^0.5.0",
+    "@connectrpc/connect": "^2.0.2",
+    "@connectrpc/connect-web": "^2.0.2",
+    "@improbable-eng/grpc-web": "^0.15.0",
+    "@improbable-eng/grpc-web-node-http-transport": "^0.15.0",
+    "express": "^5.1.0",
+    "google-protobuf": "^3.21.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.0.5",
+    "@angular/cli": "^20.0.5",
+    "@angular/compiler-cli": "^20.0.0",
+    "@bufbuild/buf": "^1.55.1",
+    "@bufbuild/protoc-gen-es": "^2.6.0",
+    "@types/express": "^5.0.1",
+    "@types/google-protobuf": "^3.15.12",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "jasmine-core": "~5.7.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "ts-protoc-gen": "^0.15.0",
+    "typescript": "~5.8.2"
+  }
+}
