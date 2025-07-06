@@ -1,14 +1,13 @@
-edition = "2023";
+syntax = "proto3";
 
 package timesheet_manager;
 
+option csharp_namespace = "new_timesheet_manager_server";
+
 import "buf/validate/validate.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/go_features.proto";
 import "google/type/date.proto";
 import "google/type/money.proto";
-
-option features.(pb.go).api_level = API_OPAQUE;
 
 message Distance {
     enum Unit {
