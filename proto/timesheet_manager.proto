@@ -251,14 +251,14 @@ message CreateActivityRequest {
     Activity activity = 1;
 }
 message CreateActivityResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateActivityRequest {
     Activity activity = 1;
 }
 message UpdateActivityResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteActivityRequest {
@@ -270,7 +270,7 @@ message ValidateActivityRequest {
     Activity activity = 1;
 }
 message ValidateActivityResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service ActivityService {
@@ -293,14 +293,14 @@ message CreatePhaseRequest {
     Phase phase = 1;
 }
 message CreatePhaseResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdatePhaseRequest {
     Phase phase = 1;
 }
 message UpdatePhaseResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeletePhaseRequest {
@@ -312,7 +312,7 @@ message ValidatePhaseRequest {
     Phase phase = 1;
 }
 message ValidatePhaseResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service PhaseService {
@@ -335,14 +335,14 @@ message CreateClientRequest {
     Client client = 1;
 }
 message CreateClientResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateClientRequest {
     Client client = 1;
 }
 message UpdateClientResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteClientRequest {
@@ -354,7 +354,7 @@ message ValidateClientRequest {
     Client client = 1;
 }
 message ValidateClientResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service ClientService {
@@ -377,14 +377,14 @@ message CreateProjectRequest {
     Project project = 1;
 }
 message CreateProjectResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateProjectRequest {
     Project project = 1;
 }
 message UpdateProjectResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteProjectRequest {
@@ -396,7 +396,7 @@ message ValidateProjectRequest {
     Project project = 1;
 }
 message ValidateProjectResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service ProjectService {
@@ -419,14 +419,14 @@ message CreateTimesheetRequest {
     Timesheet timesheet = 1;
 }
 message CreateTimesheetResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateTimesheetRequest {
     Timesheet timesheet = 1;
 }
 message UpdateTimesheetResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteTimesheetRequest {
@@ -438,7 +438,7 @@ message ValidateTimesheetRequest {
     Timesheet timesheet = 1;
 }
 message ValidateTimesheetResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service TimesheetService {
@@ -461,14 +461,14 @@ message CreateEmployeeRequest {
     Employee employee = 1;
 }
 message CreateEmployeeResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateEmployeeRequest {
     Employee employee = 1;
 }
 message UpdateEmployeeResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteEmployeeRequest {
@@ -480,7 +480,7 @@ message ValidateEmployeeRequest {
     Employee employee = 1;
 }
 message ValidateEmployeeResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 service EmployeeService {
@@ -503,14 +503,14 @@ message CreateUserRequest {
     User user = 1;
 }
 message CreateUserResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message UpdateUserRequest {
     User user = 1;
 }
 message UpdateUserResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message DeleteUserRequest {
@@ -522,7 +522,7 @@ message ValidateUserRequest {
     User user = 1;
 }
 message ValidateUserResponse {
-    repeated ValidationError errors = 1;
+    repeated ValidationError validation_errors = 1;
 }
 
 message FetchUsernamesRequest {}
