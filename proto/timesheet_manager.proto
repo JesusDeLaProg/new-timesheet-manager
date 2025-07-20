@@ -89,7 +89,11 @@ message User {
     string username = 2 [(buf.validate.field).required = true, (buf.validate.field).string.min_len = 3];
     Role role = 3 [(buf.validate.field).required = true, (buf.validate.field).enum.defined_only = true];
     string email = 4 [(buf.validate.field).required = true, (buf.validate.field).string.email = true];
-    bytes password = 5 [(buf.validate.field).required = true, (buf.validate.field).bytes.min_len = 1];
+}
+
+message Credentials {
+    string username = 1;
+    string password = 2;
 }
 
 message Activity {
@@ -246,12 +250,16 @@ message FetchActivitiesResponse {
 message CreateActivityRequest {
     Activity activity = 1;
 }
-message CreateActivityResponse {}
+message CreateActivityResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateActivityRequest {
     Activity activity = 1;
 }
-message UpdateActivityResponse {}
+message UpdateActivityResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteActivityRequest {
     bytes id = 1;
@@ -284,12 +292,16 @@ message FetchPhasesResponse {
 message CreatePhaseRequest {
     Phase phase = 1;
 }
-message CreatePhaseResponse {}
+message CreatePhaseResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdatePhaseRequest {
     Phase phase = 1;
 }
-message UpdatePhaseResponse {}
+message UpdatePhaseResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeletePhaseRequest {
     bytes id = 1;
@@ -322,12 +334,16 @@ message FetchClientsResponse {
 message CreateClientRequest {
     Client client = 1;
 }
-message CreateClientResponse {}
+message CreateClientResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateClientRequest {
     Client client = 1;
 }
-message UpdateClientResponse {}
+message UpdateClientResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteClientRequest {
     bytes id = 1;
@@ -360,12 +376,16 @@ message FetchProjectsResponse {
 message CreateProjectRequest {
     Project project = 1;
 }
-message CreateProjectResponse {}
+message CreateProjectResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateProjectRequest {
     Project project = 1;
 }
-message UpdateProjectResponse {}
+message UpdateProjectResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteProjectRequest {
     bytes id = 1;
@@ -398,12 +418,16 @@ message FetchTimesheetsResponse {
 message CreateTimesheetRequest {
     Timesheet timesheet = 1;
 }
-message CreateTimesheetResponse {}
+message CreateTimesheetResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateTimesheetRequest {
     Timesheet timesheet = 1;
 }
-message UpdateTimesheetResponse {}
+message UpdateTimesheetResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteTimesheetRequest {
     bytes id = 1;
@@ -436,12 +460,16 @@ message FetchEmployeesResponse {
 message CreateEmployeeRequest {
     Employee employee = 1;
 }
-message CreateEmployeeResponse {}
+message CreateEmployeeResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateEmployeeRequest {
     Employee employee = 1;
 }
-message UpdateEmployeeResponse {}
+message UpdateEmployeeResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteEmployeeRequest {
     bytes id = 1;
@@ -474,12 +502,16 @@ message FetchUsersResponse {
 message CreateUserRequest {
     User user = 1;
 }
-message CreateUserResponse {}
+message CreateUserResponse {
+    repeated ValidationError errors = 1;
+}
 
 message UpdateUserRequest {
     User user = 1;
 }
-message UpdateUserResponse {}
+message UpdateUserResponse {
+    repeated ValidationError errors = 1;
+}
 
 message DeleteUserRequest {
     bytes id = 1;

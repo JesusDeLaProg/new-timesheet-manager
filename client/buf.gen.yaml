@@ -10,7 +10,7 @@ plugins:
     opt:
       - target=ts
       # This option enables Valid types
-      # - valid_types=protovalidate_required+legacy_required
+      - valid_types=protovalidate_required+legacy_required
     out: src/gen
     # Also generate any imported dependencies
     include_imports: true
