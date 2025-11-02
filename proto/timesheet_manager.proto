@@ -43,7 +43,8 @@ message Employee {
                 expression: "this.day > 0 && this.month > 0 && this.year > 0"
             }
         ];
-        google.type.Money hourly_rate = 4 [
+        Project.Type project_type = 4;
+        google.type.Money hourly_rate = 5 [
             (buf.validate.field).required = true,
             (buf.validate.field).cel = {
                 id: "hourly_rate.hascurrencycode",
@@ -182,7 +183,7 @@ message TimesheetEntry {
             expression: "this.day > 0 && this.month > 0 && this.year > 0"
         }
     ];
-    google.protobuf.Duration time = 2 [(buf.validate.field).duration.gt = { seconds: 0 }];
+    google.protobuf.Duration time = 2 [(buf.validate.field).duration.gte = { seconds: 0 }];
 }
 
 message TimesheetLine {
