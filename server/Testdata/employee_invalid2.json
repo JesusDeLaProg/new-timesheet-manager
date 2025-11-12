@@ -1,0 +1,17 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "roles": [
+    {
+      "title": "Software Engineer",
+      "projectType": "TYPE_PRIVATE",
+      "hourlyRate": { "currencyCode": "USD", "units": "100" }
+    },
+    {
+      "title": "Senior Software Engineer",
+      "start": { "year": 2022, "month": 1, "day": 1 },
+      "projectType": "TYPE_PRIVATE",
+      "hourlyRate": { "currencyCode": "USD", "units": "120" }
+    }
+  ]
+}

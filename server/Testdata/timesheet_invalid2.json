@@ -1,0 +1,101 @@
+
+{
+  "employeeId": "ZW1wbG95ZWVfaWRfMQ==",
+  "begin": {
+    "year": 2025,
+    "month": 11,
+    "day": 3
+  },
+  "end": {
+    "year": 2025,
+    "month": 11,
+    "day": 15
+  },
+  "lines": [
+    {
+      "projectId": "cHJvamVjdF9pZF8x",
+      "phaseId": "cGhhc2VfaWRfMQ==",
+      "activityId": "YWN0aXZpdHlfaWRfMQ==",
+      "misc": "Miscellaneous work",
+      "entries": [
+        {
+          "date": { "year": 2025, "month": 11, "day": 2 },
+          "time": "0s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 3 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 4 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 5 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 6 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 7 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 8 },
+          "time": "0s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 9 },
+          "time": "0s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 10 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 11 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 12 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 13 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 14 },
+          "time": "28800s"
+        },
+        {
+          "date": { "year": 2025, "month": 11, "day": 15 },
+          "time": "0s"
+        }
+      ]
+    }
+  ],
+  "travels": [
+    {
+      "projectId": "cHJvamVjdF9pZF8x",
+      "date": { "year": 2025, "month": 11, "day": 5 },
+      "from": "Office",
+      "to": "Client Site",
+      "distance": {
+        "unit": "UNIT_KILOMETER",
+        "units": "50"
+      },
+      "expenses": [
+        {
+          "description": "Parking",
+          "amount": {
+            "currencyCode": "CAD",
+            "units": "15"
+          }
+        }
+      ]
+    }
+  ]
+}

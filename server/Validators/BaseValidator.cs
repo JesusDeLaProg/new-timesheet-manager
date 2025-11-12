@@ -1,20 +1,40 @@
 
 using Google.Protobuf;
-using ProtoValidate;
+
+using System.Collections.Generic;
+
+
 
 namespace new_timesheet_manager_server.Validators;
 
-public class BaseValidator(ILogger logger, IValidator validator)
-{
-    private readonly ILogger _logger = logger;
-    protected readonly IValidator Validator = validator;
 
-    protected virtual ValidationResult ValidateMessage(IMessage message)
+
+public class BaseValidator
+
+{
+
+    protected readonly ILogger Logger;
+
+
+
+    public BaseValidator(ILogger logger)
+
     {
-        using (_logger.BeginScope("Validating message using ProtoValidate: {Message}", message))
-        {
-            return Validator.Validate(message, false);
-        }
+
+        Logger = logger;
+
+    }
+
+
+
+    public virtual List<ValidationError> ValidateMessage(IMessage message)
+
+    {
+
+        return new List<ValidationError>();
+
     }
 
 }
+
+
