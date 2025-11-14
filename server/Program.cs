@@ -1,21 +1,23 @@
+using Google.Cloud.Firestore;
 using new_timesheet_manager_server.Services;
-using ProtoValidate;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
 
 // Add services to the container.
+var projectId = builder.Configuration["GCP_PROJECT_ID"] ?? "timesheet-manager-project";
+builder.Services.AddSingleton(FirestoreDb.Create(projectId));
+builder.Services.AddModels();
+
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
-builder.Services.AddProtoValidate();
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
     builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+           .AllowAnyMethod()
+           .AllowAnyHeader()
+           .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
 }));
+
 
 var app = builder.Build();
 
