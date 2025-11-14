@@ -22,7 +22,7 @@ public class ActivityServiceImpl(ILogger<ActivityServiceImpl> logger, ProtoValid
         if (violations.Violations.Count > 0)
         {
             var result = new ValidateActivityResponse { };
-            result.Errors.AddRange(violations.Violations.Select(v => new ValidationError { Path = v.FieldPath, Error = v.Message }));
+            result.ValidationErrors.AddRange(violations.Violations.Select(v => new ValidationError { Path = v.FieldPath, Error = v.Message }));
             return Task.FromResult(result);
         }
         else
